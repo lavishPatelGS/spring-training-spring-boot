@@ -3,6 +3,7 @@ package org.groupsoft.training.userservice.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.groupsoft.training.userservice.dao.LoginDao;
 import org.groupsoft.training.userservice.model.entity.UserEntity;
 import org.groupsoft.training.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import aj.org.objectweb.asm.commons.Method;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -25,6 +29,14 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
+//	@RequestMapping(path = "/login", method = RequestMethod.POST)
+	@PostMapping("/login")
+	public ResponseEntity<String> login(@RequestBody LoginDao loginDao) {
+//		System.out.println(header);
+		String token = userService.login(loginDao);
+		return new ResponseEntity<>(token, HttpStatus.OK);
+	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity userEntity) {
